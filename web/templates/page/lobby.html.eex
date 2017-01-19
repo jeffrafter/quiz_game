@@ -1,0 +1,17 @@
+<script>
+  window.playerId = '<%= @id %>';
+</script>
+
+<div class="jumbotron">
+  <h2 id="welcome" class="animated pulse">Join a game!</h2>
+</div>
+
+<div style="text-align:center">
+  <ul id="games">
+  </ul>
+  <a class="btn" id="update" href="#">Update</a>
+</div>
+
+<div class="meta">
+  Player id: <%= @id %>
+</div>

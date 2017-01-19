@@ -1,0 +1,152 @@
+/* This file is for your main application css. */
+
+/*
+font-family: 'Fontdiner Swanky', cursive; <- Welcome font; quirky, heavier, better apos
+font-family: 'Londrina Solid', cursive; <- Question and answer font (check out the sketch version)
+*/
+
+body {
+  background: purple;
+  color: white;
+  min-height: 100%;
+}
+
+.container {
+  min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+}
+
+.jumbotron {
+  background: none;
+}
+
+.header {
+  margin-bottom: 30px;
+  min-height: 92px;
+  border-bottom: none;
+}
+
+.header ul {
+  margin-top: 0;
+}
+
+.header ul li {
+  background: white;
+}
+
+.center {
+  text-align: center;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h2#welcome {
+  font-size: 128px;
+  font-family: 'Fontdiner Swanky', cursive;
+}
+
+.meta {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding-bottom: 20px;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+}
+
+.or {
+  margin: 26px;
+  font-size: 26px;
+  font-family: 'Londrina Solid', cursive;
+}
+
+.btn {
+  background-color: white;
+  font-family: 'Londrina Solid', cursive;
+  color: purple;
+  font-size:36px;
+}
+
+.btn.orange {
+  background-color: orange;
+  color: white;
+}
+
+ul {
+  padding: 0;
+  text-align: center;
+}
+li {
+  text-align: center;
+  font-family: 'Londrina Solid', cursive;
+  color: white;
+  font-size: 36px;
+}
+#players li {
+  color: orange;
+}
+
+.state {
+  display: none;
+}
+.state.active {
+  display: block;
+}
+
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+/* https://webdesignerhut.com/5-animations-using-css-keyframes/ */
+
+/*
+ * Shake animation
+*/
+@-webkit-keyframes shake {
+  0%, 100% {-webkit-transform: translateX(0);}
+  10%, 30%, 50%, 70%, 90% {-webkit-transform: translateX(-10px);}
+  20%, 40%, 60%, 80% {-webkit-transform: translateX(10px);}
+}
+@keyframes shake {
+  0%, 100% {transform: translateX(0);}
+  10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+  20%, 40%, 60%, 80% {transform: translateX(10px);}
+}
+.shake {
+  -webkit-animation-name: shake;
+  animation-name: shake;
+}
+
+/*
+ * Pulse animation
+*/
+
+@-webkit-keyframes pulse {
+  0% { -webkit-transform: scale(1); }
+  50% { -webkit-transform: scale(1.1); }
+  100% { -webkit-transform: scale(1); }
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+
+

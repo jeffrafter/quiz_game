@@ -1,0 +1,32 @@
+<script>
+    window.hostId = '<%= @id %>';
+</script>
+
+<div class="state" data-state="start">
+  <div class="jumbotron">
+    <h2 id="welcome" class="animated pulse">Start a new game!</h2>
+  </div>
+
+  <div style="text-align:center">
+    <a class="btn" id="start" href="#">Start</a>
+  </div>
+</div>
+
+<div class="state" data-state="waiting">
+  <div class="jumbotron">
+    <h2 id="welcome" class="animated pulse">Waiting for <br>players!</h2>
+  </div>
+
+  <div style="text-align:center">
+    <a class="btn" id="ready" href="#">Ready</a>
+  </div>
+</div>
+
+<div style="text-aling:center">
+  <ul id="players">
+  </ul>
+</div>
+
+<div class="meta">
+  Host id: <%= @id %>
+</div>
