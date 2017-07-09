@@ -1,37 +1,34 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import store from './store';
+import Root from './components/Root'
+import Welcome from './components/Welcome'
+import Lobby from './components/Lobby'
+import Game from './components/Game'
 
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
+const history = syncHistoryWithStore(browserHistory, store)
 
-// import socket from "./socket"
-
-import Lobby from "./lobby.js"
-import Host from "./host.js"
-import Player from "./player.js"
-
-if (window.location.pathname === '/lobby') {
-  Lobby.init()
+class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router history={history}>
+          <Route path="/" component={Root}>
+            <IndexRoute component={Welcome}/>
+            <Route path="lobby" component={Lobby}/>
+            <Route path="game/:id" component={Game}/>
+          </Route>
+        </Router>
+      </Provider>
+    )
+  }
 }
 
-if (window.location.pathname === '/host') {
-  Host.init()
-}
-
-if (window.location.pathname === '/play') {
-  Player.init()
-}
+ReactDOM.render(
+  <App/>,
+  document.getElementById('container')
+)

@@ -149,4 +149,7 @@ li {
   animation-name: pulse;
 }
 
-
+input {
+  color: purple;
+  background: lightgray;
+}

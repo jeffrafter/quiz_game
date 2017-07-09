@@ -1,17 +1,4 @@
+<div id="container"/>
 <script>
   window.playerId = '<%= @id %>';
 </script>
-
-<div class="jumbotron">
-  <h2 id="welcome" class="animated pulse">Welcome to<br>Quiz Game!</h2>
-</div>
-
-<div class="center">
-  <a class="btn" href="/host">Host a game</a>
-  <span class="or">or</span>
-  <a class="btn" href="/lobby">Join a game</a>
-</div>
-
-<div class="meta">
-  Player id: <%= @id %>
-</div>

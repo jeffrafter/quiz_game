@@ -1,31 +1,15 @@
-import {Socket} from 'phoenix'
+import { Socket } from 'phoenix'
 
-let Player = {
-  channel: null,
+export default class Player {
+  constructor() {
+    this.channel = null;
+  }
 
-  init() {
-    Player.attachEvents()
-    Player.connect()
-  },
-
-  attachEvents() {
-    let button = document.getElementById("buzz")
-    if (button) button.onclick = Player.buzz
-  },
-
-  buzz(e) {
-    if (e) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    console.log("Buzz!")
-  },
-
-  connect() {
+  connect(gameId) {
     let socket = new Socket("/socket", {params: {id: window.playerId}})
     socket.connect()
 
-    let channel = socket.channel('player:'+window.gameId)
+    let channel = socket.channel(`player:${gameId}`)
 
     // When you first join the channel, the game will be looked up
     // or created. If the connection to the host is severed the game will
@@ -35,14 +19,13 @@ let Player = {
         console.log('ok', reply)
       })
       .receive('error', reply => {
-        error(`Sorry, you can't join because ${reply.reason}`)
+        this.error(`Sorry, you can't join because ${reply.reason}`)
       })
 
-    Player.channel = channel
-  },
+    this.channel = channel
+  }
 
   error(message) {
     console.log(message)
-  },
+  }
 }
-export default Player

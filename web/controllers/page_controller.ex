@@ -43,4 +43,14 @@ defmodule QuizGame.PageController do
   def play(conn, params) do
     render(conn, "play.html", id: conn.cookies["player"], game_id: params["id"])
   end
+
+
+  def react(conn, _params) do
+    player_id = conn.cookies["player"] || QuizGame.generate_player_id
+
+    conn
+    |> put_resp_cookie("player", player_id, max_age: 24*60*60)
+    |> render("react.html", id: player_id)
+  end
+
 end
