@@ -9,11 +9,8 @@ class PlayerGame extends React.Component {
     this.state = { player: new Player() }
   }
 
-  componentDidMount() {
-    this.state.player.connect(this.props.gameId)
-  }
-
   render() {
+    console.log('rendering <PlayerGame />', this.props.game);
     return (
       <div>
         <div className="jumbotron">
@@ -21,8 +18,8 @@ class PlayerGame extends React.Component {
         </div>
 
         <div className="meta">
-        Player id: {this.props.playerId}<br/>
-        Game id: {this.props.gameId}
+        Player id: {this.props.player.playerId}<br/>
+        Game id: {this.props.player.gameId}
         </div>
       </div>
     )
@@ -30,8 +27,8 @@ class PlayerGame extends React.Component {
 }
 let mapStateToProps = (state, props) => {
   return {
-    playerId: state.game.playerId,
-    gameId: props.params.id
+    player: state.game.player,
+    game: state.game.game
   }
 }
 

@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { updateGame } from '../../actions'
+import { PlayerWelcome, PlayerGame } from '../Player'
 
-class PlayerWelcome extends React.Component {
+class Player extends React.Component {
   constructor(props) {
     super(props)
     this.joinGame = this.joinGame.bind(this)
@@ -40,7 +41,7 @@ class PlayerWelcome extends React.Component {
   }
 
   render() {
-    console.log('rendering...', this.props.game)
+    console.log('rendering <Player />...', this.props.game)
     var game = this.props.game
     if (!game || (game && game.state == "waiting")) {
       return <PlayerWelcome />
@@ -64,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerWelcome)
+export default connect(mapStateToProps, mapDispatchToProps)(Player)

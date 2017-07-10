@@ -31,8 +31,8 @@ class PlayerWelcome extends React.Component {
         </div>
 
         <div className="center">
-          // <input ref={(t) => {this.gameIdField = t}} type="text" placeholder="Enter game code" />
-          // <a className="btn" href="#" onClick={ this.joinGame }>Go!</a>
+          <input ref={(t) => {this.gameIdField = t}} type="text" placeholder="Enter game code" />
+          <a className="btn" href="#" onClick={ this.joinGame }>Go!</a>
         </div>
 
         <div className="meta">
