@@ -4,7 +4,7 @@ defmodule QuizGame.UserSocket do
   ## Channels
   channel "lobby", QuizGame.LobbyChannel
   channel "host:*", QuizGame.HostChannel
-  channel "player:*", QuizGame.PlayerChannel
+  channel "game:*", QuizGame.GameChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

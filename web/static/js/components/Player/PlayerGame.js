@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import Player from '../player'
+import { Player } from '../../lib'
 
-class Game extends React.Component {
+class PlayerGame extends React.Component {
   constructor(props) {
     super(props)
     this.state = { player: new Player() }
@@ -35,4 +35,4 @@ let mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(Game)
+export default connect(mapStateToProps)(PlayerGame)

@@ -1,7 +1,6 @@
-
-export const setPlayerId = (playerId) => {
+export const updateGame = (game) => {
   return {
-    type: 'SET_PLAYER_ID',
-    playerId: playerId
+    type: "UPDATE_GAME",
+    game: game
   }
 }

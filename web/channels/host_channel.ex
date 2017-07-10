@@ -25,6 +25,14 @@ defmodule QuizGame.HostChannel do
     {:ok, game_data, socket}
   end
 
+  def handle_in("start", _params, socket) do
+    game_id = socket.assigns[:game_id]
+
+    _ = QuizGame.Game.start(game_id)
+
+    {:reply, :ok, socket}
+  end
+
   def handle_info({:after_join, _status}, socket) do
     QuizGame.LobbyChannel.broadcast_current_games
 

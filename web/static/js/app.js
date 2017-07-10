@@ -5,10 +5,9 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
 import store from './store';
-import Root from './components/Root'
-import Welcome from './components/Welcome'
-import Lobby from './components/Lobby'
-import Game from './components/Game'
+import PlayerWelcome from './components/Player/PlayerWelcome'
+import Host from './components/Host/Host'
+import Player from './components/Player/Player'
 
 const history = syncHistoryWithStore(browserHistory, store)
 
@@ -17,11 +16,8 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <Route path="/" component={Root}>
-            <IndexRoute component={Welcome}/>
-            <Route path="lobby" component={Lobby}/>
-            <Route path="game/:id" component={Game}/>
-          </Route>
+          <Route path="/" component={Player}/>
+          <Route path="/host" component={Host}/>
         </Router>
       </Provider>
     )

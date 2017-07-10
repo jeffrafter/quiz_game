@@ -1,11 +1,16 @@
 import { reducer } from 'redux'
 import * as constants from '../constants/index'
+import { Host, Player } from '../lib'
 
-export default (state = {}, action) => {
-  console.log("Reducer for state, action", state, action)
+const initialState = {
+  host: new Host(window.hostId),
+  player: new Player(window.playerId)
+}
+
+export default (state = initialState, action) => {
   switch(action.type) {
-    case constants.SET_PLAYER_ID:
-      return Object.assign({}, state, { playerId: action.playerId })
+    case "UPDATE_GAME":
+      return Object.assign({}, state, {game: action.game})
     default:
       return state
   }

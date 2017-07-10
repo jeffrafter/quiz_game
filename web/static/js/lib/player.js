@@ -1,28 +1,35 @@
 import { Socket } from 'phoenix'
 
 export default class Player {
-  constructor() {
-    this.channel = null;
+  constructor(playerId) {
+    this.playerId = playerId
+    this.gameId = null
+    this.channel = null
   }
 
-  connect(gameId) {
-    let socket = new Socket("/socket", {params: {id: window.playerId}})
+  connect(gameId, callback) {
+    console.log('connecting', this.channel)
+    if (this.channel) { return }
+
+    let socket = new Socket("/socket", {params: {id: this.playerId}})
     socket.connect()
 
-    let channel = socket.channel(`player:${gameId}`)
+    let channel = socket.channel(`game:${gameId}`)
 
     // When you first join the channel, the game will be looked up
     // or created. If the connection to the host is severed the game will
     // continue to run and the host can reconnect.
     channel.join()
-      .receive('ok', reply => {
-        console.log('ok', reply)
+      .receive('ok', game => {
+        console.log('ok', game)
+        callback(game)
       })
       .receive('error', reply => {
         this.error(`Sorry, you can't join because ${reply.reason}`)
       })
 
     this.channel = channel
+    this.gameId = gameId
   }
 
   error(message) {
