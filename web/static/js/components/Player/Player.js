@@ -28,20 +28,16 @@ class Player extends React.Component {
   }
 
   connectToGame(gameId) {
-    console.log('player', this.props.player)
     this.props.player.connect(gameId, (game) => {
       window.localStorage.setItem("gameId", gameId);
-      console.log("connected", game);
       this.props.updateGame(game);
     })
     this.props.player.channel.on('game', game => {
-      console.log('10 players a playin', game)
       this.props.updateGame(game)
     })
   }
 
   render() {
-    console.log('rendering <Player />...', this.props.game)
     var game = this.props.game
     if (!game || (game && game.state == "waiting")) {
       return <PlayerWelcome />

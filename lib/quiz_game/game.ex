@@ -1,6 +1,14 @@
 defmodule QuizGame.Game do
   use GenServer
 
+  # possible states
+  #   waiting
+  #   playing
+  #   asking
+  #   voting
+  #   scoring
+  #   ending
+
   @typedef """
   The basic state of the game
   """
@@ -9,9 +17,11 @@ defmodule QuizGame.Game do
     questions: [],
     host: nil,
     players: [],
+    seconds: 0,
     turns: [],
     winner: nil,
     state: nil,
+    round: nil
   ]
 
   def join(game_id, player_id) do
@@ -32,12 +42,26 @@ defmodule QuizGame.Game do
       questions: QuizGame.Questions.questions,
       host: nil,
       players: [],
-      turns: [],
-      winner: nil,
-      state: :waiting
+      seconds: 0,
+      turns: [], winner: nil, state: :waiting, round: nil
     }
 
     {:ok, game}
+  end
+
+  def next(game) do
+    case game.state do
+      :waiting -> :playing
+      :playing -> :asking
+      :asking -> :voting
+      :voting -> :scoring
+      :scoring ->
+        if (game.round == 4) do
+          :ending
+        else
+          :asking
+        end
+    end
   end
 
   def start_link(id) do
@@ -70,13 +94,32 @@ defmodule QuizGame.Game do
     {:reply, {:ok, :playing}, game}
   end
 
+  def handle_info(:tick, game) do
+    next = %{game | seconds: game.seconds - 1}
+
+    if next.seconds > 0 do
+      schedule_tick()
+      QuizGame.Endpoint.broadcast("game:#{next}", "tick", next)
+    else
+      next = %{game | state: next(game)}
+      QuizGame.Endpoint.broadcast("game:#{next}", "buzzzzzzzzzz", next)
+    end
+
+    {:noreply, next}
+  end
+
+  defp schedule_tick() do
+    Process.send_after(self(), :tick, 1000)
+  end
+
   defp via_tuple(id) do
     {:via, Registry, {:game_registry, id}}
   end
 
   defp handle_start(game) do
-    game = %{game | state: :playing, winner: nil}
     game = %{game | players: Enum.map(game.players, fn(x) -> %{x | score: 0} end)}
+    game = %{game | seconds: 3, state: :playing}
+    schedule_tick()
     game
   end
 end

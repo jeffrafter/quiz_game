@@ -1,6 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux'
 
-export default class PlayingGame extends React.Component {
+class PlayingGame extends React.Component {
+  componentDidMount() {
+    this.props.host.channel.on('tick', game => {
+      console.log(game)
+    })
+  }
+
   render() {
     return (
       <div className="center">
@@ -9,3 +16,12 @@ export default class PlayingGame extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    host: state.game.host,
+    game: state.game.game
+  }
+}
+
+export default connect(mapStateToProps)(PlayingGame)

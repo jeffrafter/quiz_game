@@ -4,7 +4,8 @@ import { Host, Player } from '../lib'
 
 const initialState = {
   host: new Host(window.hostId),
-  player: new Player(window.playerId)
+  player: new Player(window.playerId),
+  game: null
 }
 
 export default (state = initialState, action) => {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 import { updateGame } from '../../actions'
 
 import WaitingGame from './WaitingGame'
@@ -17,7 +16,10 @@ class Host extends React.Component {
       console.log('SUP', game)
       this.props.updateGame(game)
     })
-    this.props.host.channel.on('game', game => { this.props.updateGame(game) })
+    this.props.host.channel.on('game', game => {
+      console.log('got da game', game);
+      this.props.updateGame(game)
+    })
   }
 
   startGame() {
