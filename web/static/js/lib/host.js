@@ -20,7 +20,6 @@ export default class Host {
     // continue to run and the host can reconnect.
     channel.join()
       .receive('ok', game => {
-        console.log('ok', game)
         this.game = game
         callback(game)
       })

@@ -13,11 +13,11 @@ class Host extends React.Component {
 
   componentDidMount() {
     this.props.host.connect(game => {
-      console.log('SUP', game)
+      console.log('host connected to game', game)
       this.props.updateGame(game)
     })
     this.props.host.channel.on('game', game => {
-      console.log('got da game', game);
+      console.log('host received the game', game)
       this.props.updateGame(game)
     })
   }

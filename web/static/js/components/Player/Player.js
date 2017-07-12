@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { updateGame } from '../../actions'
 import { PlayerWelcome, PlayerGame } from '../Player'
+import { BeatLoader } from 'halogen'
 
 class Player extends React.Component {
   constructor(props) {
@@ -29,22 +30,27 @@ class Player extends React.Component {
 
   connectToGame(gameId) {
     this.props.player.connect(gameId, (game) => {
-      window.localStorage.setItem("gameId", gameId);
-      this.props.updateGame(game);
+      console.log('player connected to game', game)
+      window.localStorage.setItem("gameId", gameId)
+      this.props.updateGame(game)
     })
     this.props.player.channel.on('game', game => {
+      console.log('player received game', game)
       this.props.updateGame(game)
     })
   }
 
   render() {
     var game = this.props.game
-    if (!game || (game && game.state == "waiting")) {
+    if (game && game.state == "waiting") {
       return <PlayerWelcome />
     } else if (game) {
       return <PlayerGame game={game} />
     }
-    return null;
+
+    return (
+      <div className="center"><BeatLoader /></div>
+    )
   }
 }
 

@@ -95,14 +95,13 @@ defmodule QuizGame.Game do
   end
 
   def handle_info(:tick, game) do
-    next = %{game | seconds: game.seconds - 1}
-
-    if next.seconds > 0 do
+    new_seconds = game.seconds - 1
+    next = if (new_seconds > 0), do: %{game | seconds: new_seconds}, else: %{game | state: next(game)}
+    if new_seconds > 0 do
+      QuizGame.Endpoint.broadcast("game:#{next.id}", "tick", next)
       schedule_tick()
-      QuizGame.Endpoint.broadcast("game:#{next}", "tick", next)
     else
-      next = %{game | state: next(game)}
-      QuizGame.Endpoint.broadcast("game:#{next}", "buzzzzzzzzzz", next)
+      QuizGame.Endpoint.broadcast("game:#{next.id}", "timer_ended", next)
     end
 
     {:noreply, next}
@@ -118,7 +117,7 @@ defmodule QuizGame.Game do
 
   defp handle_start(game) do
     game = %{game | players: Enum.map(game.players, fn(x) -> %{x | score: 0} end)}
-    game = %{game | seconds: 3, state: :playing}
+    game = %{game | seconds: 20, state: :playing}
     schedule_tick()
     game
   end

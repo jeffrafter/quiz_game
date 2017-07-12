@@ -8,7 +8,6 @@ export default class Player {
   }
 
   connect(gameId, callback) {
-    console.log('connecting', this.channel)
     if (this.channel) { return }
 
     let socket = new Socket("/socket", {params: {id: this.playerId}})
@@ -21,7 +20,6 @@ export default class Player {
     // continue to run and the host can reconnect.
     channel.join()
       .receive('ok', game => {
-        console.log('ok', game)
         callback(game)
       })
       .receive('error', reply => {
