@@ -99,9 +99,11 @@ defmodule QuizGame.Game do
     next = if (new_seconds > 0), do: %{game | seconds: new_seconds}, else: %{game | state: next(game)}
     if new_seconds > 0 do
       QuizGame.Endpoint.broadcast("game:#{next.id}", "tick", next)
+      QuizGame.Endpoint.broadcast("host:#{next.id}", "tick", next)
       schedule_tick()
     else
       QuizGame.Endpoint.broadcast("game:#{next.id}", "timer_ended", next)
+      QuizGame.Endpoint.broadcast("host:#{next.id}", "timer_ended", next)
     end
 
     {:noreply, next}

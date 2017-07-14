@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { updateGame } from '../../actions'
-
-import WaitingGame from './WaitingGame'
-import PlayingGame from './PlayingGame'
+import { HostWaiting, HostPlaying } from '../Host'
 
 class Host extends React.Component {
   constructor(props) {
@@ -29,12 +27,12 @@ class Host extends React.Component {
   render() {
     let gameComponent = null;
     if (this.props.game && this.props.game.state === "waiting") {
-      gameComponent = <WaitingGame
+      gameComponent = <HostWaiting
         game={this.props.game}
         startGame={this.startGame}
       />
     } else if (this.props.game) {
-      gameComponent = <PlayingGame />
+      gameComponent = <HostPlaying />
     }
 
     return (
@@ -42,7 +40,9 @@ class Host extends React.Component {
         <div className="jumbotron">
           <h2 id="welcome" className="animated pulse">Welcome to<br/>Quiz Game!</h2>
         </div>
+
         {gameComponent}
+
         <div className="meta">
           Host id: {this.props.host.hostId}
         </div>

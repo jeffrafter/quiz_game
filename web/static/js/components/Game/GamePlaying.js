@@ -1,10 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { Player } from '../../lib'
 import { updateGame } from '../../actions'
 
-class PlayerGame extends React.Component {
+class GamePlaying extends React.Component {
   componentDidMount() {
     this.props.player.channel.on('tick', game => {
       console.log('player received tick', game)
@@ -37,17 +35,18 @@ class PlayerGame extends React.Component {
     )
   }
 }
-let mapStateToProps = (state, props) => {
+
+const mapStateToProps = (state) => {
   return {
-    player: state.game.player,
-    game: state.game.game
+    game: state.game.game,
+    player: state.game.player
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateGame: (game) => { dispatch(updateGame(game)) }
+    updateGame: (game) => dispatch(updateGame(game))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerGame)
+export default connect(mapStateToProps, mapDispatchToProps)(GamePlaying)

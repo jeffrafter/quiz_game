@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class WaitingGame extends React.Component {
+export default class HostWaiting extends React.Component {
   render() {
     let players = null
     if (this.props.game) {

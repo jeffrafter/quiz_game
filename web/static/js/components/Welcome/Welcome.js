@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { updateGame } from '../../actions'
+import { browserHistory } from 'react-router'
 
-class PlayerWelcome extends React.Component {
+class Welcome extends React.Component {
   constructor(props) {
     super(props)
     this.joinGame = this.joinGame.bind(this)
@@ -11,16 +12,7 @@ class PlayerWelcome extends React.Component {
 
   joinGame() {
     const gameId = this.gameIdField.value
-
-    this.props.player.connect(gameId, (game) => {
-      window.localStorage.setItem("gameId", gameId);
-      console.log("connected", game);
-      this.props.updateGame(game);
-    })
-    this.props.player.channel.on('game', game => {
-      console.log('10 players a playin', game)
-      this.props.updateGame(game)
-    })
+    browserHistory.push(`/game/${gameId}`);
   }
 
   render() {
@@ -32,11 +24,7 @@ class PlayerWelcome extends React.Component {
 
         <div className="center">
           <input ref={(t) => {this.gameIdField = t}} type="text" placeholder="Enter game code" />
-          <a className="btn" href="#" onClick={ this.joinGame }>Go!</a>
-        </div>
-
-        <div className="meta">
-          Player id: {this.props.player.playerId}
+          <button className="btn" onClick={ this.joinGame }>Go!</button>
         </div>
       </div>
     )
@@ -56,4 +44,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerWelcome)
+export default connect(mapStateToProps, mapDispatchToProps)(Welcome)

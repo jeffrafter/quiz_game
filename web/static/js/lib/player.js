@@ -20,10 +20,10 @@ export default class Player {
     // continue to run and the host can reconnect.
     channel.join()
       .receive('ok', game => {
-        callback(game)
+        callback({game: game})
       })
       .receive('error', reply => {
-        this.error(`Sorry, you can't join because ${reply.reason}`)
+        callback({error: reply.reason})
       })
 
     this.channel = channel
