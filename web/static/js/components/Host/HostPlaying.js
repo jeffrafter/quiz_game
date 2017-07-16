@@ -8,8 +8,8 @@ class HostPlaying extends React.Component {
       console.log(game)
       this.props.updateGame(game)
     })
-    this.props.player.channel.on('timer_ended', game => {
-      console.log('player received timer_ended', game)
+    this.props.host.channel.on('done', game => {
+      console.log('player received done', game)
       this.props.updateGame(game)
     })
   }

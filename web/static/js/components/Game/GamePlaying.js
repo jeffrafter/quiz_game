@@ -9,8 +9,8 @@ class GamePlaying extends React.Component {
       this.props.updateGame(game)
     })
 
-    this.props.player.channel.on('timer_ended', game => {
-      console.log('player received timer_ended', game)
+    this.props.player.channel.on('done', game => {
+      console.log('player received done', game)
       this.props.updateGame(game)
     })
   }
