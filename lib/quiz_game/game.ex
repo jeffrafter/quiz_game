@@ -23,7 +23,8 @@ defmodule QuizGame.Game do
     questions: [],
     answers: [],
     state: nil,
-    seconds: nil # used when a timer is counting down
+    seconds: nil, # used when a timer is counting down
+    completion: nil
   ]
 
   # GenServer client
@@ -90,67 +91,21 @@ defmodule QuizGame.Game do
   # Start the game (invoked by the host)
   def handle_call(:start, _from, game) do
     game = %{game | players: Enum.map(game.players, fn(x) -> %{x | score: 0} end), state: :intro}
-    game = start_timer(game, 8)
+    game = start_timer(game, 8, :intro_complete)
     broadcast(game, "game")
 
     {:reply, {:ok, game}, game}
   end
 
   # Timer
-  defp start_timer(game, seconds) do
-    game = %{game | seconds: seconds}
+  defp start_timer(game, seconds, completion) do
     schedule_tick()
-    game
+    %{game | seconds: seconds, completion: completion}
   end
 
-  # When the timer finishes, we transition to the next state then
-  # immediately start a new timer
   defp finish_timer(game) do
-    game = next_state(game)
-
-    case game.state do
-      :ready -> start_timer(game, 3)
-      :question -> next_question(game)
-      :buzz -> start_timer(game, 3)
-      :voting -> start_timer(game, 10)
-      :scoring -> start_timer(game, 5)
-      :answer -> start_timer(game, 3)
-      :leaders -> start_timer(game, 3)
-      _ -> game
-    end
-  end
-
-  def next_state(game) do
-    state = case game.state do
-      :intro -> :ready
-      :ready -> :question
-      :question -> :buzz
-      :buzz -> :voting
-      :voting -> :scoring
-      :scoring -> :answer
-      :answer -> :leaders
-      :leaders -> next_question_or_winners(game)
-      _ -> game.state
-    end
-
-    %{game | state: state}
-  end
-
-  def next_question(game) do
-    answer = %{}
-    game = %{game | answers: [answer | game.answers]}
-    start_timer(game, 10)
-  end
-
-  def next_question_or_winners(game) do
-    question_count = Enum.count(game.questions)
-    answer_count = Enum.count(game.answers)
-
-    if answer_count < question_count do
-      :ready
-    else
-      :winners
-    end
+    Process.send_after(self(), game.completion, 1000)
+    %{game | seconds: nil, completion: nil}
   end
 
   # defp cancel_timer(game) do
@@ -161,6 +116,57 @@ defmodule QuizGame.Game do
 
   defp schedule_tick() do
     Process.send_after(self(), :tick, 1000)
+  end
+
+  def handle_info(:ready_complete, game) do
+    answer = %{}
+    game = %{game | answers: [answer | game.answers]}
+    game = start_timer(game, 10, :question_complete)
+    {:noreply, game}
+  end
+
+  def handle_info(:question_complete, game) do
+    game = %{game | state: :buzz}
+    game = start_timer(game, 3, :buzz_complete)
+    {:noreply, game}
+  end
+
+  def handle_info(:buzz_complete, game) do
+    game = %{game | state: :voting}
+    game = start_timer(game, 10, :voting_complete)
+    {:noreply, game}
+  end
+
+  def handle_info(:voting_complete, game) do
+    game = %{game | state: :scoring}
+    game = start_timer(game, 5, :scoring_complete)
+    {:noreply, game}
+  end
+
+  def handle_info(:scoring_complete, game) do
+    game = %{game | state: :answer}
+    game = start_timer(game, 3, :answer_complete)
+    {:noreply, game}
+  end
+
+  def handle_info(:answer_complete, game) do
+    question_count = Enum.count(game.questions)
+    answer_count = Enum.count(game.answers)
+
+    if answer_count < question_count do
+      game = %{game | state: :leaders}
+      game = start_timer(game, 3, :leaders_complete)
+    else
+      game = %{game | state: :winners}
+    end
+
+    {:noreply, game}
+  end
+
+  def handle_info(:leaders_complete, game) do
+    game = %{game | state: :ready}
+    game = start_timer(game, 3, :ready_complete)
+    {:noreply, game}
   end
 
   def handle_info(:tick, %{seconds: nil} = game), do: {:noreply, game}
