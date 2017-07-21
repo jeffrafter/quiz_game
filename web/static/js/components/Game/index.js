@@ -1,2 +1,11 @@
 export { default as Game } from './Game';
-export { default as GamePlaying } from './GamePlaying';
+export { default as GameWaiting } from './GameWaiting';
+export { default as GameIntro } from './GameIntro';
+export { default as GameReady } from './GameReady';
+export { default as GameQuestion } from './GameQuestion';
+export { default as GameBuzz } from './GameBuzz';
+export { default as GameVoting } from './GameVoting';
+export { default as GameScoring } from './GameScoring';
+export { default as GameAnswer } from './GameAnswer';
+export { default as GameLeaders } from './GameLeaders';
+export { default as GameWinners } from './GameWinners';

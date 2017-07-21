@@ -8,14 +8,14 @@ defmodule QuizGame.GameChannel do
     id = socket.assigns.id
 
     case QuizGame.Game.join(game_id, id) do
-      {:ok, status} ->
+      {:ok, game} ->
         socket =
           socket
           |> assign(:game_id, game_id)
-          |> assign(:status, status)
+          |> assign(:status, game.state)
 
-        send self(), {:after_join, status}
-        {:ok, %{state: status}, socket}
+        send self(), {:after_join, game.state}
+        {:ok, game, socket}
       {:error, reason} ->
         {:error, %{reason: reason}}
     end
