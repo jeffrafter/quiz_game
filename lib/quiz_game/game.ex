@@ -98,6 +98,7 @@ defmodule QuizGame.Game do
   end
 
   # Timer
+
   defp start_timer(game, seconds, completion) do
     schedule_tick()
     %{game | seconds: seconds, completion: completion}
@@ -108,44 +109,52 @@ defmodule QuizGame.Game do
     %{game | seconds: nil, completion: nil}
   end
 
-  # defp cancel_timer(game) do
-  #   game = %{game | seconds: nil}
-  #   broadcast(game, "cancel")
-  #   game
-  # end
-
   defp schedule_tick() do
     Process.send_after(self(), :tick, 1000)
   end
 
+  # Completions
+
+  def handle_info(:intro_complete, game) do
+    game = %{game | state: :ready}
+    game = start_timer(game, 3, :ready_complete)
+    broadcast(game, "game")
+    {:noreply, game}
+  end
+
   def handle_info(:ready_complete, game) do
     answer = %{}
-    game = %{game | answers: [answer | game.answers]}
+    game = %{game | state: :question, answers: [answer | game.answers]}
     game = start_timer(game, 10, :question_complete)
+    broadcast(game, "game")
     {:noreply, game}
   end
 
   def handle_info(:question_complete, game) do
     game = %{game | state: :buzz}
     game = start_timer(game, 3, :buzz_complete)
+    broadcast(game, "game")
     {:noreply, game}
   end
 
   def handle_info(:buzz_complete, game) do
     game = %{game | state: :voting}
     game = start_timer(game, 10, :voting_complete)
+    broadcast(game, "game")
     {:noreply, game}
   end
 
   def handle_info(:voting_complete, game) do
     game = %{game | state: :scoring}
     game = start_timer(game, 5, :scoring_complete)
+    broadcast(game, "game")
     {:noreply, game}
   end
 
   def handle_info(:scoring_complete, game) do
     game = %{game | state: :answer}
     game = start_timer(game, 3, :answer_complete)
+    broadcast(game, "game")
     {:noreply, game}
   end
 
@@ -153,12 +162,14 @@ defmodule QuizGame.Game do
     question_count = Enum.count(game.questions)
     answer_count = Enum.count(game.answers)
 
-    if answer_count < question_count do
+    game = if answer_count < question_count do
       game = %{game | state: :leaders}
-      game = start_timer(game, 3, :leaders_complete)
+      start_timer(game, 3, :leaders_complete)
     else
-      game = %{game | state: :winners}
+      %{game | state: :winners}
     end
+
+    broadcast(game, "game")
 
     {:noreply, game}
   end
@@ -173,7 +184,7 @@ defmodule QuizGame.Game do
   def handle_info(:tick, game) do
     seconds = game.seconds - 1
 
-    game = if seconds >= 0 do
+    game = if seconds > 0 do
       %{game | seconds: seconds}
     else
       finish_timer(game)
@@ -181,7 +192,7 @@ defmodule QuizGame.Game do
 
     broadcast(game, "tick")
 
-    if seconds >= 0 do
+    if seconds > 0 do
       schedule_tick()
     end
 
