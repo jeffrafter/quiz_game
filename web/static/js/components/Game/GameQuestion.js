@@ -2,6 +2,6 @@ import React from 'react'
 
 export default class GameQuestion extends React.Component {
   render() {
-    return <p>This is a question! WHAT?????</p>
+    return <h1>{this.props.question[0]}</h1>
   }
 }

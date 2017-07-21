@@ -52,7 +52,9 @@ class Game extends React.Component {
     }
 
     if (game.state == "question") {
-      return <GameQuestion />
+      let index = this.props.game.answers.length - 1
+      let question = this.props.game.questions[index]
+      return <GameQuestion question={question} />
     }
 
     if (game.state == "buzz") {
@@ -68,7 +70,9 @@ class Game extends React.Component {
     }
 
     if (game.state == "answer") {
-      return <GameAnswer />
+      let index = this.props.game.answers.length - 1
+      let question = this.props.game.questions[index]
+      return <GameAnswer question={question} />
     }
 
     if (game.state == "leaders") {
